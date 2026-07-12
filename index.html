@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Kamil Mach - Tester</title>
+    <style>
+        /* --- Základní nastavení stránky --- */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #121212; 
+            color: #f0f0f0; 
+            line-height: 1.6; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Omezení šířky obsahu na střed obrazovky */
+        .container { 
+            max-width: 960px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+
+        /* Animace při načítání stránky */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HEADER a Jazykové tlačítko (Nahoru vpravo) --- */
+        .header { 
+            text-align: center; 
+            padding: 40px 0; 
+            animation: fadeIn 1.5s ease-in-out; 
+            position: relative; 
+        }
+
+        h1 { font-size: 3em; margin: 0; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        
+        /* Subtitle */
+        .subtitle { font-size: 1.5em; color: #aaa; margin-bottom: 20px; text-align: center;}
+
+        /* --- JAZYKOVÉ TLAČÍTKO (Vlajka v kruhu) --- */
+        .lang-switch {
+            position: absolute;
+            top: 15px; 
+            right: 0;
+            display: flex;
+            gap: 20px; 
+            z-index: 10;
+        }
+
+        .lang-btn {
+            background-color: rgba(255, 255, 255, 0.1); /* Poloprůhledný podklad */
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px; /* Malší polštářek uvnitř */
+            border-radius: 50%; /* KRUHOVÝ TVAR */
+            font-size: 1.2rem; /* Velká ikona vlajky */
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3); 
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.1) rotate(-10deg); 
+            background-color: #57c2a0;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        .lang-btn.active {
+            background-color: #e9c46a; 
+            color: #121212; /* Tmavý text na světlém tlačítku */
+            transform: scale(1.15);
+            border-color: #fff;
+        }
+
+        /* --- Kontakty (Centrování) --- */
+        .contact { 
+            background-color: #1e1e1e; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 30px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            text-align: center !important; /* CENTROVÁNÍ */
+        }
+
+        .contact-item { 
+            margin-bottom: 10px; 
+            font-size: 1.1em; 
+            padding-left: 0; /* Odebráno zarovnání vlevo */
+        } 
+
+        /* --- Sekce O mně --- */
+        .about { background-color: #1e1e1e; padding: 25px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: left !important;}
+        .about:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+
+        /* --- Pracovní zkušenosti s VYSOKÝM HOVER EFEKTEM --- */
+        .job-section { margin-bottom: 30px; text-align: left !important;}
+        
+        .job-card { 
+            background-color: #1e1e1e; 
+            padding: 25px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            border-left: 5px solid transparent; 
+        }
+
+        /* Silnější hover efekt (zvětšení 8%) */
+        .job-card:hover { 
+            transform: scale(1.08) translateY(-8px); 
+            box-shadow: 0 20px 40px rgba(57, 205, 57, 0.4); 
+            border-left: 5px solid #00ff7f; 
+        }
+
+        .job-title { font-size: 1.4em; font-weight: bold; color: #fff; margin-bottom: 5px; text-align: left !important;}
+        
+        .company { 
+            color: #4a9eff; 
+            font-style: italic; 
+            text-align: left !important; 
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+
+        .period { color: #6c757d; font-size: 0.9em; text-align: left !important;}
+
+        /* --- Dovednosti (Grid layout) --- */
+        .skills-section { margin-top: 40px; }
+        
+        .skills-grid { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+            justify-content: center;
+        }
+
+        .tech-button {
+            display: inline-block; 
+            background-color: #0e3b28; 
+            color: #fff; 
+            padding: 12px 20px; 
+            border-radius: 8px;
+            text-align: center; 
+            font-weight: bold;
+            text-decoration: none; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            min-width: 120px; 
+            border: 3px solid #2a7f58; 
+        }
+
+        /* HOVER EFEKT pro dovednosti */
+        .tech-button:hover { 
+            transform: scale(1.15) !important; 
+            background-color: #c8e6c9; 
+            border-color: #76ff03; 
+            text-shadow: 0 0 15px rgba(118, 255, 3, 0.8); 
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER a Jazykové tlačítko -->
+    <div class="header">
+        <!-- Tlačítka pro jazyky vpravo nahoře (Kruhový tvar s vlajkami) -->
+        <div class="lang-switch">
+            <span onclick="setLanguage('en')" id="btn-en" class="lang-btn active">🇬🇧</span>
+            <span onclick="setLanguage('cz')" id="btn-cz" class="lang-btn">🇨🇿</span>
+        </div>
+
+        <h1>KAMIL MACH</h1>
+        
+        <!-- Subtitle se mění podle jazyka -->
+        <div class="subtitle" data-en="Tester with Python | Automation & Agile – since 2018" 
+                         data-cz="Tester s Pythonem | Automatizace & Agile – od roku 2018">
+            Tester s Pythonem | Automatizace & Agile – od roku 2018
+        </div>
+        
+        <!-- Kontakty (Lokalizované) -->
+        <div class="contact">
+            <h3 id="contact-title" style="margin-top:0; color:#aaa;" data-cz="Kontakt a lokalizace" data-en="Contact and Location">Kontakt a lokalizace</h3>
+            
+            <div class="contact-item" id="contact-phone">
+                📞 <span data-cz="Mobil:" data-en="Phone:">Telefon:</span> 721 256 123
+            </div>
+            
+            <div class="contact-item" id="contact-email">
+                ✉️ <span data-cz="E-mail:" data-en="E-mail:">E-mail:</span> kamil.machuj@gmail.com
+            </div>
+            
+            <div class="contact-item" id="contact-location">
+                📍 <span data-cz="Brno, Česká Republika" data-en="Brno, Czech Republic">Brno, Česká Republika</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sekce O mně -->
+    <div class="about" id="about-section">
+        <h2 style="text-align: center;" data-cz="👤 O mně" data-en="👤 About Me">👤 O mně</h2>
+        
+        <!-- Hlavní text (Odstavec 1) -->
+        <p data-cz="Zkušený manuální tester se silným základem v automatizaci (Python, Selenium, Playwright), pečlivý v analýze chyb a návrhu testovacích scénářů." 
+           data-en="Experienced Manual Tester with a strong foundation in automation (Python, Selenium, Playwright), meticulous in bug analysis and test case design.">
+           <strong>Zkušený manuální tester se silným základem v automatizaci (Python, Selenium, Playwright), pečlivý v analýze chyb a návrhu testovacích scénářů.</strong>
+        </p>
+        
+        <!-- Cíle a motivace (Odstavec 2) -->
+        <p data-cz="Hledám příležitost připojit se k dynamickému týmu, kde využiji své doposud nabyté schopnosti a know-how a dále se budu moci rozvíjet v automatizovaném testování." 
+           data-en="I am looking for an opportunity to join a dynamic team where I can leverage my current skills and know-how while further developing my expertise in automated testing.">
+           Hledám příležitost připojit se k dynamickému týmu, kde využiji své doposud nabyté schopnosti a know-how a dále se budu moci rozvíjet v automatizovaném testování.
+        </p>
+
+        <!-- Koníčky (Odstavec 3 - nastylovaný bez vnořených tagů) -->
+        <p style="margin-top: 15px;" 
+           data-cz="Moje koníčky: PC, Videohry, pes, výlety, folklor, hudební nástroj, skriptování/automatizace, programování." 
+           data-en="Hobbies: PC, Video games, dog, trips, folklore, musical instrument, scripting/automation, programming.">
+           <strong>Moje koníčky:</strong> PC, Videohry, pes, výlety, folklor, hudební nástroj, skriptování/automatizace, programování.
+        </p>
+    </div>
+
+    <!-- Pracovní zkušenosti -->
+    <h2 style="text-align:center;" data-en="💼 Work Experience" data-cz="💼 Pracovní zkušenosti">💼 Pracovní zkušenosti</h2>
+    
+    <div class="job-section">
+        <!-- Job 1: Aricoma -->
+        <div class="job-card">
+            <div class="job-title" data-en="Test lead" data-cz="Test lead">Test lead</div>
+            <div class="company">Aricoma / Brno</div>
+            <div class="period" data-en="February 2025 - February 2026" data-cz="únor 2025 - únor 2026">únor 2025 - únor 2026</div>
+            <ul>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="As Test Lead, I managed a team of 5 testers in a non-agile environment. Collaborating with colleagues, we defined test plans and sprint capacities." 
+                                         data-cz="V roli test leadu jsem měl pod sebou 5 členný tým testerů v neagilním prostředí, ve spolupráci s kolegy jsme určovali testovací plán a kapacity do sprintů.">
+                                        V roli test leadu jsem měl pod sebou 5 členný tým testerů v neagilním prostředí, ve spolupráci s kolegy jsme určovali testovací plán a kapacity do sprintů.
+                </li>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="For future automation, we added testing tags to main elements for easier work with elements." 
+                                         data-cz="Pro budoucí automatizaci jsme do kódu přidali testovací tagy na hlavní prvky, pro snažší práci s elementy.">
+                                        Pro budoucí automatizaci jsme do kódu přidali testovací tagy na hlavní prvky pro budování snáze prací se selektory.
+                </li>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="I presented severed times demos to customers, and organized UAT testing from scenario preparation to customer acceptance." 
+                                         data-cz="Několikrát jsem prezentoval "demo" zákazníkům a zařizoval akceptační testování od přípravy scénářů po akceptaci zákazníkem.">
+                                        Několikrát jsem prezentoval "demo" zákazníkům a zařizoval akceptační testování od přípravy scénářů po akceptaci zákazníkem.
+                </li>
+            </ul>
+        </div>
+
+        <!-- Job 2: FEO -->
+        <div class="job-card">
+            <div class="job-title" data-en="Software Tester" data-cz="Software tester">Software tester</div>
+            <div class="company">FEO digital agency s.r.o / Brno</div>
+            <div class="period" data-en="January 2022 - October 2024" data-cz="led 2022 - říj 2024">leden 2022 - říjen 2024</div>
+            <ul>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="E-commerce testing, agile development, writing Selenium + Python automated tests (E2E), user testing." 
+                                         data-cz="Testování e-shopu, agilní vývoj, psaní E2E automatizovaných testů, uživatelské testy - Selenium + Python.">
+                                        Testování e-shopu, agilní vývoj, psaní EZE automatizovaných testů, uživatelské testy - Selenium + Python.
+                </li>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="Website speed measurement via Sitespeed.io, data visualization in Grafana." 
+                                         data-cz="Měření rychlosti webu přes Sitespeed.io, vizualizace dat v Grafaně.">
+                                        Měření rychlosti webu přes Sitespeed.io, vizualizace dat v Grafaně.
+                </li>
+            </ul>
+        </div>
+
+        <!-- Job 3: Styrax -->
+        <div class="job-card">
+            <div class="job-title" data-en="Software Tester" data-cz="Software tester">Software tester</div>
+            <div class="company">Styrax, a.s / Brno</div>
+            <div class="period" data-en="June 2020 - June 2021" data-cz="červen 2020 - červen 2021">červen 2020 - červen 2021</div>
+            <ul>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="Tester in an agile team for insurance system, automated API tests in SOAP UI." 
+                                         data-cz="Na pozici testera v agilním týmu zabývající se systémem pro pojišťovny jsem dělal automatické testy API v SOAP UI.">
+                                        Na pozici testera v agilním týmu zabývající se systémem pro pojišťovny jsem dělal automatické testy API v SOAP UI.
+                </li>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="Worked with EA documentation and yaml format for API." 
+                                         data-cz="Pracoval jsem také s dokumentací v EA a pro API v yaml formátu.">
+                                        Pracoval jsem také s dokumentací v EA a pro API v yaml formátu.
+                </li>
+            </ul>
+        </div>
+
+        <!-- Job 4: Embedit -->
+        <div class="job-card">
+            <div class="job-title" data-en="Software Tester" data-cz="Software tester">Software tester</div>
+            <div class="company">Embedit / Brno</div>
+            <div class="period" data-en="June 2018 - April 2020" data-cz="červen 2018 - duben 2020">červen 2018 - duben 2020</div>
+            <ul>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="Started as a junior tester in a large team, ended as a tester in an agile team." 
+                                         data-cz="Nastoupil jsem jako tester junior do velkého týmu, skončil jsem jako tester v agilním týmu.">
+                                        Nastoupil jsem jako tester junior do velkého týmu, skončil jsem jako tester v agilním týmu.
+                </li>
+                <li style="margin-left: 20px; margin-top: 5px;" data-en="Work included: evaluating smoke and regression test runs, testing new features, API, patches, and hotfixes." 
+                                         data-cz="Moje práce bylo: vyhodnocovat běhy smoke a regresních testů, testovat novou funkcionalitu, API, patche i hotfixy.">
+                                        Moje práce bylo: vyhodnocovat běhy smoke a regresních testů, testovat manuálně novou funkcionalitu, včetně API, patchů i hotfixů.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Dovednosti s tlačítky vedle sebe -->
+    <div class="skills-section">
+        <h2 style="text-align:center;" data-en="🛠️ Skills/techs" data-cz="🛠️ Dovednosti/technologie">🛠️ Dovednosti/technologie</h2>
+        
+        <div class="skills-grid">
+            <!-- Python -->
+            <a href="https://www.python.org/about/" target="_blank" rel="noopener noreferrer" class="tech-button">Python jr.</a>
+            
+            <!-- Selenium -->
+            <a href="https://www.selenium.dev/documentation/" target="_blank" rel="noopener noreferrer" class="tech-button">Selenium</a>
+
+            <!-- Playwright -->
+            <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer" class="tech-button">Playwright</a>
+
+            <!-- SQL -->
+            <a href="https://www.w3resource.com/sql/" target="_blank" rel="noopener noreferrer" class="tech-button">SQL</a>
+
+            <!-- SOAPUI -->
+            <a href="https://www.soapui.org/" target="_blank" rel="noopener noreferrer" class="tech-button">SOAP UI</a>
+
+            <!-- Jira -->
+            <a href="https://www.atlassian.com/software/jira/docs" target="_blank" rel="noopener noreferrer" class="tech-button">Jira</a>
+
+            <!-- Nové dovednosti (EA, REST, Azure) -->
+            <a href="https://en.wikipedia.org/wiki/Enterprise_Architect_(software)" target="_blank" rel="noopener noreferrer" class="tech-button">Enterprise Architect</a>
+            
+            <a href="https://restfulapi.net/" target="_blank" rel="noopener noreferrer" class="tech-button">REST API</a>
+
+            <a href="https://azure.microsoft.com/" target="_blank" rel="noopener noreferrer" class="tech-button">MS Azure</a>
+
+            <a href="https://learn.microsoft.com/en-us/azure/" target="_blank" rel="noopener noreferrer" class="tech-button">MS AD</a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function setLanguage(lang) {
+        // Nastavení aktivního stavu tlačítek
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+        document.getElementById('btn-cz').classList.toggle('active', lang === 'cz');
+
+        // Změna textů na stránce
+        const elements = document.querySelectorAll('[data-en]');
+        
+        elements.forEach(element => {
+            if (lang === 'en') {
+                element.textContent = element.getAttribute('data-en');
+            } else {
+                element.textContent = element.getAttribute('data-cz');
+            }
+        });
+
+        // Nastavení atributu lang v HTML head (dobré pro SEO/Google)
+        document.documentElement.lang = lang;
+    }
+</script>
+
+</body>
+</html>
